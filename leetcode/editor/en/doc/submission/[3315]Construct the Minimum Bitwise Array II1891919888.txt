@@ -1,0 +1,8 @@
+class Solution {
+    fun minBitwiseArray(nums: List<Int>): IntArray {
+        
+    }
+}
+
+//total_correct:
+//compile_error:Line 4: Char 5: ERROR: Missing return statement.
