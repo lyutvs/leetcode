@@ -65,7 +65,7 @@
 // 
 // 1 <= nums.length <= 10⁵ 
 // 1 <= nums[i] <= 10⁹ 
-// 1 <= k <= 10⁵ 
+// 1 <= k <= 10⁵
 // 
 //
 // Related Topics Array Sliding Window Sorting 👍 112 👎 3
