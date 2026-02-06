@@ -66,38 +66,53 @@
 class Solution {
     fun maxSumTrionic(nums: IntArray): Long {
         val n = nums.size
+        if (n < 4) return 0
+
+        val maxIncEnd = LongArray(n)
+        maxIncEnd[0] = nums[0].toLong()
+        for (i in 1 until n) {
+            if (nums[i] > nums[i - 1]) {
+                maxIncEnd[i] = nums[i].toLong() + maxOf(0L, maxIncEnd[i - 1])
+            } else {
+                maxIncEnd[i] = nums[i].toLong()
+            }
+        }
+
+        val maxIncStart = LongArray(n)
+        maxIncStart[n - 1] = nums[n - 1].toLong()
+        for (i in n - 2 downTo 0) {
+            if (nums[i] < nums[i + 1]) {
+                maxIncStart[i] = nums[i].toLong() + maxOf(0L, maxIncStart[i + 1])
+            } else {
+                maxIncStart[i] = nums[i].toLong()
+            }
+        }
+
         var maxSum = Long.MIN_VALUE
-        
+
         for (p in 1 until n - 2) {
-            for (q in p + 1 until n - 1) {
-                if (nums[p - 1] < nums[p] && nums[p] > nums[q] && nums[q] < nums[q + 1]) {
-                    var sum = nums[p].toLong() + nums[q].toLong()
-                    
-                    var left = p - 1
-                    while (left >= 0 && nums[left] < nums[left + 1]) {
-                        sum += nums[left]
-                        left--
+            if (nums[p] > nums[p - 1]) {
+                val bestLeftPart = maxIncEnd[p - 1] + nums[p]
+
+                var q = p + 1
+                var sumDecreasePart = 0L
+                while (q < n - 1) {
+                    if (nums[q] >= nums[q - 1]) break
+
+                    sumDecreasePart += nums[q]
+
+                    if (nums[q] < nums[q + 1]) {
+                        val bestRightPart = maxIncStart[q + 1]
+                        val currentTotal = bestLeftPart + sumDecreasePart + bestRightPart
+                        if (currentTotal > maxSum) {
+                            maxSum = currentTotal
+                        }
                     }
-                    
-                    var mid = p + 1
-                    while (mid < q && nums[mid - 1] > nums[mid]) {
-                        sum += nums[mid]
-                        mid++
-                    }
-                    
-                    var right = q + 1
-                    while (right < n && nums[right - 1] < nums[right]) {
-                        sum += nums[right]
-                        right++
-                    }
-                    
-                    if (mid == q) {
-                        maxSum = maxOf(maxSum, sum)
-                    }
+                    q++
                 }
             }
         }
-        
+
         return maxSum
     }
 }
